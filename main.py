@@ -19,8 +19,6 @@ def main():
             query_str = json.dumps(query)
             send_udp_broadcast(query_str, port)
 
-            time.sleep(5)
-
             with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
                 s.bind(('', port))
                 s.settimeout(5)
