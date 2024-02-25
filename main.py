@@ -2,38 +2,38 @@ import socket
 import json
 import time
 
-
 def send_udp_broadcast(message, port):
-    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP) as s:
-        s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        s.sendto(message.encode('utf-8'), ('<broadcast>', port))
+    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    udp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
+    udp_socket.sendto(message.encode('utf-8'), ('<broadcast>', port))
 
-def main():
+def handle_discovery_response(response):
     try:
-        peer_id = "testing-peer1"
-        port = 9876
+        data = json.loads(response)
+        if data.get('status') == 'ok' and data.get('peer_id') != my_peer_id:
+            print(f"Discovered peer: {data['peer_id']} at {data['ip']}")
+            # Zde byste mohli navázat TCP spojení s novým nalezeným peerem
+    except json.JSONDecodeError:
+        print("Invalid JSON format in discovery response")
 
+my_peer_id = "testing-peer1"
+udp_port = 9876
+
+while True:
+    discovery_query = {"command": "hello", "peer_id": my_peer_id}
+    send_udp_broadcast(json.dumps(discovery_query), udp_port)
+
+    time.sleep(5)
+
+    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    udp_socket.settimeout(1)
+    try:
         while True:
-            query = {"command": "hello", "peer_id": peer_id}
-            query_str = json.dumps(query)
-            send_udp_broadcast(query_str, port)
+            response, address = udp_socket.recvfrom(1024)
+            response = response.decode('utf-8')
+            handle_discovery_response(response)
+    except socket.timeout:
+        pass
 
-            with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
-                s.bind(('', port))
-                s.settimeout(5)
-
-                while True:
-                    try:
-                        data, addr = s.recvfrom(1024)
-                        response = json.loads(data.decode('utf-8'))
-
-                        if response.get("peer_id") != peer_id:
-                            print(f"A: {json.dumps(response)}")
-                    except socket.timeout:
-                        break
-    except Exception as e:
-        print(e)
-
-if __name__ == "__main__":
-    main()
+    udp_socket.close()
