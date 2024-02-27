@@ -25,7 +25,9 @@ def main():
                 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 udp_socket.settimeout(1)
                 udp_socket.bind(('', port))
-                response, _ = udp_socket.recvfrom(1024)
+                response, address = udp_socket.recvfrom(1024)
+
+                peer_ip = address[0]
 
                 peer_response = udp.handle_udp_response(response.decode('utf-8'))
                 if peer_response and 'peer_id' in peer_response and peer_response['peer_id'] != peer_id:
@@ -33,7 +35,7 @@ def main():
                     print(peer_response)
 
                     tcp_peer = TcpPeer(peer_id, port)
-                    tcp_socket = tcp_peer.establish_tcp_connection(peer_response['peer_ip'])
+                    tcp_socket = tcp_peer.establish_tcp_connection(peer_ip)
                     handshake_response = tcp_peer.perform_handshake(tcp_socket)
 
                     if handshake_response and handshake_response.get('status') == 'ok':
