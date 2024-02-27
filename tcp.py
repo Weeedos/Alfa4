@@ -17,6 +17,7 @@ class TcpPeer:
         handshake_message = {"command": "hello", "peer_id": self.peer_id}
         tcp_socket.send(json.dumps(handshake_message).encode('utf-8'))
         response = tcp_socket.recv(1024).decode('utf-8')
+        print(f"Odpověď na handshake: {response}")
         handshake_response = json.loads(response)
         if 'messages' in handshake_response:
             self.messages.update(handshake_response['messages'])
