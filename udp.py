@@ -3,7 +3,7 @@ import json
 
 
 class Udp:
-    def send_udp_broadcast(message, ip, port):
+    def send_udp_broadcast(self, message, ip, port):
         udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         udp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
@@ -11,7 +11,7 @@ class Udp:
 
         udp_socket.close()
 
-    def handle_udp_response(response):
+    def handle_udp_response(self, response):
         try:
             data = json.loads(response)
             return data
