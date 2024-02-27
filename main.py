@@ -15,7 +15,7 @@ def main():
         query_message = json.dumps(query)
         udp.send_udp_broadcast(query_message, udp_ip, udp_port)
 
-        responses = set()
+        responses = []
         start_time = time.time()
 
         while time.time() - start_time < 5:
@@ -27,7 +27,7 @@ def main():
 
                 peer_response = udp.handle_udp_response(response.decode('utf-8'))
                 if peer_response and 'peer_id' in peer_response and peer_response['peer_id'] != peer_id:
-                    responses.add(peer_response)
+                    responses.append(peer_response)
                     print(peer_response)
 
             except socket.timeout:
