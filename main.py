@@ -35,13 +35,7 @@ def main():
                     print(peer_response)
 
                     tcp_peer = TcpPeer(peer_id, port)
-                    try:
-                        tcp_socket = tcp_peer.establish_tcp_connection(peer_ip)
-                        tcp_socket.settimeout(5)
-                    except TimeoutError:
-                        print(f"Connection to {peer_response['peer_id']} timed out. Retrying...")
-                        continue
-
+                    tcp_socket = socket.create_connection((peer_ip, port), timeout=1)
                     handshake_response = tcp_peer.perform_handshake(tcp_socket)
 
                     if handshake_response and handshake_response.get('status') == 'ok':
