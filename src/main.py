@@ -3,8 +3,8 @@ import socket
 import json
 import time
 
-from src.tcp.tcp import TcpPeer
-from src.udp.udp import Udp
+from tcp import TcpPeer
+from udp import Udp
 
 
 def main():
