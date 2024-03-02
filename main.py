@@ -37,6 +37,7 @@ def main():
                     tcp_peer = TcpPeer(peer_id, port)
                     try:
                         tcp_socket = tcp_peer.establish_tcp_connection(peer_ip)
+                        tcp_socket.settimeout(5)
                     except TimeoutError:
                         print(f"Connection to {peer_response['peer_id']} timed out. Retrying...")
                         continue
