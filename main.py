@@ -10,7 +10,7 @@ from udp import Udp
 def main():
     udp = Udp()
     config = configparser.ConfigParser()
-    config.read("./cfg/config.ini")
+    config.read("./config.ini")
 
     peer_id = config.get("peer", "id")
     udp_ip = config.get("peer", "udp_ip")
