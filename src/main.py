@@ -14,7 +14,7 @@ def main():
 
     peer_id = config.get("peer", "id")
     udp_ip = config.get("peer", "udp_ip")
-    port = config.get("peer", "port")
+    port = int(config.get("peer", "port"))
 
     while True:
         query = {"command": "hello", "peer_id": peer_id}
