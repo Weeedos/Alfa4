@@ -12,9 +12,9 @@ def main():
     config = configparser.ConfigParser()
     config.read("./cfg/config.ini")
 
-    peer_id = config["peer"]["id"].strip()
-    udp_ip = config["peer"]["udp_ip"].strip()
-    port = config["peer"]["port"].strip()
+    peer_id = config.get("peer", "id")
+    udp_ip = config.get("peer", "udp_ip")
+    port = config.get("peer", "port")
 
     while True:
         query = {"command": "hello", "peer_id": peer_id}
