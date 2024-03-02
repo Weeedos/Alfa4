@@ -58,6 +58,8 @@ def main():
 
             except socket.timeout:
                 pass
+            except json.JSONDecodeError as err:
+                print(err)
             finally:
                 udp_socket.close()
 
