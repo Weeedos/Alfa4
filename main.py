@@ -35,7 +35,11 @@ def main():
                     print(peer_response)
 
                     tcp_peer = TcpPeer(peer_id, port)
-                    tcp_socket = tcp_peer.establish_tcp_connection(peer_ip)
+                    try:
+                        tcp_socket = tcp_peer.establish_tcp_connection(peer_ip)
+                    except TimeoutError:
+                        print(f"Connection to {peer_response['peer_id']} timed out. Retrying...")
+                        continue
                     handshake_response = tcp_peer.perform_handshake(tcp_socket)
 
                     if handshake_response and handshake_response.get('status') == 'ok':
@@ -46,7 +50,7 @@ def main():
                         """
                         timestamp = str(int(time.time() * 1000))
                         message_id = f"{timestamp}"
-                        message = f"Testovací zpráva od {peer_id}"
+                        message = "Test"
                         tcp_peer.send_chat_message(tcp_socket, message_id, message)
                         
 
