@@ -1,16 +1,20 @@
+import configparser
 import socket
 import json
 import time
 
-from tcp import TcpPeer
-from udp import Udp
+from src.tcp.tcp import TcpPeer
+from src.udp.udp import Udp
 
 
 def main():
     udp = Udp()
-    peer_id = "vosol-peer"
-    udp_ip = "172.31.255.255"
-    port = 9876
+    config = configparser.ConfigParser()
+    config.read("./cfg/config.ini")
+
+    peer_id = config["peer"]["id"].strip()
+    udp_ip = config["peer"]["udp_ip"].strip()
+    port = config["peer"]["port"].strip()
 
     while True:
         query = {"command": "hello", "peer_id": peer_id}
