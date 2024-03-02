@@ -6,8 +6,30 @@ import time
 from tcp import TcpPeer
 from udp import Udp
 
+"""
+Peer Discovery and Communication Script
+
+This script facilitates communication between peers over UDP and establishes a persistent TCP connection with peers who respond to a discovery broadcast.
+
+The script uses a configuration file ("./cfg/config.ini") to retrieve peer information, such as ID, UDP IP address, and port.
+
+The communication process involves sending a "hello" message as a UDP broadcast to discover other peers. Upon receiving responses, the script attempts to establish a TCP connection with each peer.
+
+If a TCP connection is successfully established, a handshake is performed, and the script prints the chat history with the peer.
+"""
+
 
 def main():
+    """
+        Main function for peer discovery and communication.
+
+        1. Reads peer configuration from "./cfg/config.ini".
+        2. Sends a "hello" UDP broadcast to discover peers.
+        3. Attempts to establish a TCP connection with responding peers.
+        4. Performs a handshake and prints the chat history if the connection is successful.
+
+        The process repeats indefinitely.
+    """
     udp = Udp()
     config = configparser.ConfigParser()
     config.read("./cfg/config.ini")
