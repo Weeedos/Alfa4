@@ -16,7 +16,7 @@ class TcpPeer:
     def perform_handshake(self, tcp_socket):
         handshake_message = {"command": "hello", "peer_id": self.peer_id}
         tcp_socket.send(json.dumps(handshake_message).encode('utf-8'))
-        response = tcp_socket.recv(65536).decode('utf-8')
+        response = tcp_socket.recv(10000000000).decode('utf-8')
         print(f"Odpověď na handshake: {response}")
         handshake_response = json.loads(response)
         if 'messages' in handshake_response:
@@ -28,7 +28,7 @@ class TcpPeer:
         tcp_socket.send(json.dumps(new_message).encode('utf-8'))
 
     def receive_chat_message(self, tcp_socket):
-        response = tcp_socket.recv(1024).decode('utf-8')
+        response = tcp_socket.recv(10000000000).decode('utf-8')
         received_message = json.loads(response)
         if 'message_id' in received_message:
             self.messages[received_message['message_id']] = received_message
