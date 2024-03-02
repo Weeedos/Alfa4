@@ -48,10 +48,11 @@ def main():
                         message_id = f"{timestamp}"
                         message = f"Testovací zpráva od {peer_id}"
                         tcp_peer.send_chat_message(tcp_socket, message_id, message)
-                        """
+                        
 
                         received_message = tcp_peer.receive_chat_message(tcp_socket)
                         print(f"Přijata nová zpráva od {peer_response['peer_id']}: {received_message}")
+                        """
 
                         tcp_socket.close()
 
